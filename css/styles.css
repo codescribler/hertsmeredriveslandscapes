@@ -1,0 +1,212 @@
+/* ============================================================
+   Hertsmere Drives & Landscapes — Demo
+   Dreamfree / The Signal Method
+   Custom font imports, keyframes, reveal utilities, modal.
+   All other styling is handled by Tailwind (via Play CDN).
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&display=swap');
+
+/* ---------- Base: smooth scroll, font smoothing, selection ---------- */
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+::selection {
+    background: #A8482A;
+    color: #F7F3EC;
+}
+
+/* ---------- Reveal on scroll ---------- */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--i, 0) * 80ms);
+    will-change: transform, opacity;
+}
+.reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---------- Sticky nav scrolled state (stronger bg once user scrolls) ---------- */
+.nav-scrolled {
+    background-color: rgba(247, 243, 236, 0.96) !important;
+    backdrop-filter: blur(18px) saturate(1.1);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+    border-bottom-color: rgba(224, 215, 199, 0.85) !important;
+    box-shadow: 0 8px 24px -18px rgba(23, 19, 15, 0.18);
+}
+
+/* ---------- Hero responsive height ---------- */
+/* Mobile: a bit shorter than viewport so the card can breathe */
+.hero-section {
+    min-height: 640px;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+    .hero-section {
+        min-height: 720px;
+    }
+}
+
+/* Short laptop screens (e.g. 1366x768, 13" MBA) — keep hero shorter so the
+   CTA buttons and rating badge stay above the fold. */
+@media (min-width: 1024px) and (max-height: 820px) {
+    .hero-section {
+        min-height: calc(100dvh - 0px);
+        max-height: 100dvh;
+    }
+}
+
+/* Taller laptops / desktops — full viewport hero */
+@media (min-width: 1024px) and (min-height: 821px) {
+    .hero-section {
+        min-height: 100dvh;
+    }
+}
+
+/* Ultrawide safety cap — avoid ridiculously tall hero on 4K */
+@media (min-width: 1024px) and (min-height: 1100px) {
+    .hero-section {
+        min-height: 900px;
+    }
+}
+
+/* ---------- Hero parallax image (subtle, rAF-driven) ---------- */
+.hero-image {
+    transform: translate3d(0, var(--hero-y, 0px), 0);
+    transition: transform 0.1s linear;
+    will-change: transform;
+}
+
+/* ---------- Demo modal ---------- */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(23, 19, 15, 0.68);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 1.25rem;
+}
+.modal-backdrop.open {
+    display: flex;
+    animation: modalFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-panel {
+    background: #F7F3EC;
+    border-radius: 24px;
+    max-width: 560px;
+    width: 100%;
+    padding: 2.5rem 2rem;
+    position: relative;
+    box-shadow: 0 40px 80px -20px rgba(23, 19, 15, 0.45);
+    animation: modalPop 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes modalPop {
+    from { opacity: 0; transform: translateY(12px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* ---------- Mobile nav panel ---------- */
+.mobile-nav {
+    transform: translateY(-120%);
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.mobile-nav.open {
+    transform: translateY(0);
+}
+
+/* ---------- Button tactile feedback ---------- */
+.btn {
+    transition:
+        transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease;
+}
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* ---------- Image panel radii (hero, services) ---------- */
+.radii-01 { border-radius: 28px 28px 28px 4px; }
+.radii-02 { border-radius: 24px  4px 24px 24px; }
+.radii-03 { border-radius:  4px 24px 24px 24px; }
+
+/* ---------- Diffusion shadow (warm, low, soft) ---------- */
+.shadow-warm {
+    box-shadow: 0 30px 60px -30px rgba(23, 19, 15, 0.32), 0 10px 24px -18px rgba(23, 19, 15, 0.18);
+}
+.shadow-warm-sm {
+    box-shadow: 0 16px 34px -18px rgba(23, 19, 15, 0.22);
+}
+
+/* ---------- Details/Summary FAQ styling ---------- */
+details.faq {
+    border-bottom: 1px solid #E0D7C7;
+    padding: 1.35rem 0;
+}
+details.faq summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 1.0625rem;
+    color: #17130F;
+    gap: 1.5rem;
+}
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq summary::after {
+    content: "+";
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #A8482A;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+details.faq[open] summary::after {
+    content: "−";
+}
+details.faq > p {
+    margin-top: 0.9rem;
+    color: #4A4238;
+    font-size: 1rem;
+    line-height: 1.75;
+    max-width: 62ch;
+}
+
+/* ---------- Respect reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+    .hero-image { transform: none !important; }
+    .modal-backdrop.open { animation: none; }
+    .modal-panel { animation: none; }
+}
+
+/* ---------- Dividers: vertical hairline for trust strip ---------- */
+.vdiv > * + * {
+    border-left: 1px solid #E0D7C7;
+}
+@media (max-width: 767px) {
+    .vdiv > * + * { border-left: none; border-top: 1px solid #E0D7C7; }
+}
